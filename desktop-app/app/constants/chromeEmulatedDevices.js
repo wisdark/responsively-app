@@ -531,7 +531,7 @@ export default {
       type: 'emulated-device',
       order: 20,
       device: {
-        'show-by-default': true,
+        'show-by-default': false,
         title: 'Pixel 2',
         screen: {
           horizontal: {
@@ -1510,7 +1510,7 @@ export default {
       id: '42',
       type: 'emulated-device',
       device: {
-        'show-by-default': true,
+        'show-by-default': false,
         title: 'Moto G4',
         screen: {
           horizontal: {
@@ -1558,7 +1558,7 @@ export default {
       id: '43',
       type: 'emulated-device',
       device: {
-        'show-by-default': true,
+        'show-by-default': false,
         'dual-screen': true,
         title: 'Surface Duo',
         screen: {
@@ -1636,7 +1636,7 @@ export default {
       id: '44',
       type: 'emulated-device',
       device: {
-        'show-by-default': true,
+        'show-by-default': false,
         'dual-screen': true,
         title: 'Galaxy Fold',
         screen: {
@@ -1681,6 +1681,41 @@ export default {
           {
             title: 'spanned',
             orientation: 'horizontal-spanned',
+            insets: {left: 0, top: 0, right: 0, bottom: 0},
+          },
+        ],
+      },
+    },
+    {
+      id: '45',
+      type: 'emulated-device',
+      device: {
+        'show-by-default': false,
+        title: 'FUJITSU Display E24-9 TOUCH',
+        screen: {
+          horizontal: {
+            width: 1920,
+            height: 1080,
+          },
+          'device-pixel-ratio': 1,
+          vertical: {
+            width: 1080,
+            height: 1920,
+          },
+        },
+        capabilities: ['touch', 'responsive'],
+        'user-agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s Safari/537.36',
+        type: 'notebook',
+        modes: [
+          {
+            title: 'default',
+            orientation: 'vertical',
+            insets: {left: 0, top: 0, right: 0, bottom: 0},
+          },
+          {
+            title: 'default',
+            orientation: 'horizontal',
             insets: {left: 0, top: 0, right: 0, bottom: 0},
           },
         ],
