@@ -451,6 +451,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "p4nu",
+      "name": "Panu Valtanen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28947061?v=4",
+      "profile": "https://www.linkedin.com/in/panu-valtanen-446ba9108/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "d19dotca",
+      "name": "Dustin Dauncey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8153796?v=4",
+      "profile": "http://www.d19.ca",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 5,
