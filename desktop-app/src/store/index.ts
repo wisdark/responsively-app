@@ -1,4 +1,7 @@
+import path from 'path';
+import { homedir } from 'os';
 import { DOCK_POSITION, PREVIEW_LAYOUTS } from '../common/constants';
+import { migrations } from './migrations';
 
 const Store = require('electron-store');
 
@@ -16,6 +19,20 @@ const schema = {
       },
     },
   },
+  renderer: {
+    type: 'object',
+    properties: {
+      individualZoomStepIndex: {
+        type: 'number',
+        default: 8,
+      },
+      zoomStepIndex: {
+        type: 'number',
+        default: 3,
+      },
+    },
+    default: {},
+  },
   devtools: {
     type: 'object',
     properties: {
@@ -29,18 +46,49 @@ const schema = {
   deviceManager: {
     type: 'object',
     properties: {
+      // TODO: remove this in a future version of v1.2.0
       activeDevices: {
         type: 'array',
         items: {
           type: 'string',
         },
-        default: ['iPhone 12 Pro', 'iPad', 'Macbook Pro'],
+        default: ['10008', '10013', '10015'],
+      },
+      previewSuites: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+            },
+            name: {
+              type: 'string',
+            },
+            devices: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+        },
+        default: [
+          {
+            id: 'default',
+            name: 'Default',
+            devices: ['10008', '10013', '10015'],
+          },
+        ],
       },
       customDevices: {
         type: 'array',
         items: {
           type: 'object',
           properties: {
+            id: {
+              type: 'string',
+            },
             name: {
               type: 'string',
             },
@@ -90,7 +138,40 @@ const schema = {
         type: 'boolean',
         default: false,
       },
+      guides: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            positions: {
+              type: 'array',
+              items: {
+                type: 'number',
+              },
+            },
+            is_vertical: {
+              type: 'boolean',
+            },
+            resolution: {
+              type: 'string',
+            },
+          },
+          default: {},
+        },
+        default: [],
+      },
+      screenshot: {
+        type: 'object',
+        properties: {
+          saveLocation: {
+            type: 'string',
+            default: path.join(homedir(), `Desktop/Responsively-Screenshots`),
+          },
+        },
+        default: {},
+      },
     },
+    default: {},
   },
   webPermissions: {
     type: 'array',
@@ -148,8 +229,39 @@ const schema = {
     },
     default: [],
   },
-};
+  bookmarks: {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+        },
+        name: {
+          type: 'string',
+        },
+        address: {
+          type: 'string',
+        },
+      },
+    },
+    default: [],
+  },
+  sponsorship: {
+    type: 'object',
+    properties: {
+      lastShown: {
+        type: 'number',
+      },
+    },
+    default: {},
+  },
+} as const;
 
-const store = new Store({ schema, watch: true });
+const store = new Store({
+  schema,
+  watch: true,
+  migrations,
+});
 
 export default store;

@@ -1,4 +1,4 @@
-import { ipcMain, nativeTheme, webContents } from 'electron';
+import { clipboard, ipcMain, nativeTheme, webContents } from 'electron';
 
 export interface DisableDefaultWindowOpenHandlerArgs {
   webContentsId: number;
@@ -23,7 +23,7 @@ export const initNativeFunctionHandlers = () => {
       _,
       arg: DisableDefaultWindowOpenHandlerArgs
     ): Promise<DisableDefaultWindowOpenHandlerResult> => {
-      webContents.fromId(arg.webContentsId).setWindowOpenHandler(() => {
+      webContents.fromId(arg.webContentsId)?.setWindowOpenHandler(() => {
         return { action: 'deny' };
       });
       return { done: true };
@@ -38,4 +38,8 @@ export const initNativeFunctionHandlers = () => {
       return { done: true };
     }
   );
+
+  ipcMain.handle('copy-to-clipboard', async (_, arg: string): Promise<void> => {
+    clipboard.writeText(arg);
+  });
 };
