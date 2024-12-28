@@ -102,7 +102,12 @@ if (customTitlebarStatus && process.platform === 'win32') {
 
 const createWindow = async () => {
   windowShownOnOpen = false;
+  let isAppInitiated = false;
   await installExtensions();
+
+  const setIsAppInitiated = () => {
+    isAppInitiated = true;
+  };
 
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -177,21 +182,49 @@ const createWindow = async () => {
     )}`
   );
 
-  mainWindow.on('ready-to-show', async () => {
-    await initInstance();
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
+  const isWindows = process.platform === 'win32';
+  let needsFocusFix = false;
+  let triggeringProgrammaticBlur = false;
+
+  mainWindow.on('blur', () => {
+    if (!triggeringProgrammaticBlur) {
+      needsFocusFix = true;
     }
-    webPermissionHandlers.init();
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.showInactive();
-      if (!windowShownOnOpen) {
-        windowShownOnOpen = true;
-        mainWindow.show();
+  });
+
+  mainWindow.on('focus', () => {
+    if (isWindows && needsFocusFix) {
+      needsFocusFix = false;
+      triggeringProgrammaticBlur = true;
+      setTimeout(function () {
+        mainWindow!.blur();
+        mainWindow!.focus();
+        setTimeout(function () {
+          triggeringProgrammaticBlur = false;
+        }, 100);
+      }, 100);
+    }
+  });
+
+  mainWindow.on('ready-to-show', async () => {
+    if (!isAppInitiated) {
+      await initInstance();
+      setIsAppInitiated();
+
+      if (!mainWindow) {
+        throw new Error('"mainWindow" is not defined');
+      }
+      webPermissionHandlers.init();
+      if (process.env.START_MINIMIZED) {
+        mainWindow.minimize();
       } else {
         mainWindow.showInactive();
+        if (!windowShownOnOpen) {
+          windowShownOnOpen = true;
+          mainWindow.show();
+        } else {
+          mainWindow.showInactive();
+        }
       }
     }
   });

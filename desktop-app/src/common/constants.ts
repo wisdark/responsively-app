@@ -10,10 +10,18 @@ export const PREVIEW_LAYOUTS = {
   COLUMN: 'COLUMN',
   FLEX: 'FLEX',
   INDIVIDUAL: 'INDIVIDUAL',
+  MASONRY: 'MASONRY',
 } as const;
 
 export type PreviewLayout =
   typeof PREVIEW_LAYOUTS[keyof typeof PREVIEW_LAYOUTS];
+
+export type Notification = {
+  id: string;
+  link?: string;
+  linkText?: string;
+  text: string;
+};
 
 export interface OpenUrlArgs {
   url: string;
